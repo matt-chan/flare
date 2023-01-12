@@ -1,0 +1,68 @@
+{% set name = "mir-flare" %}
+{% set version = "1.3.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  path: ../
+  patches: 
+    - requirements.patch
+    - cmake.patch
+
+build:
+  number: 0
+  script: {{ PYTHON }} -m pip install . -vv
+  skip: true  # [py>39]
+  skip: true  # [win]
+
+requirements:
+  build:
+    - make
+    - cmake
+    - {{ compiler('cxx') }}
+  host:
+    - pip
+    - python
+    - eigen
+    - libblas
+    - pybind11
+    - nlohmann_json
+    - wandb
+  run:
+    - ase
+    - ipython
+    - pyyaml
+    - babel
+    - pygments =2.11.2
+    - numba
+    - numpy <=1.20.3
+    - python
+    - scipy
+
+test:
+  imports:
+    - flare
+  commands:
+    - pip check
+  requires:
+    - pip
+
+about:
+  home: https://github.com/mir-group/flare
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: An open-source Python package for creating fast and accurate atomistic potentials.
+
+  description: |
+    FLARE is an open-source Python package for creating fast and accurate 
+    atomistic potentials.
+  doc_url: https://flare.readthedocs.io/
+  dev_url: https://github.com/mir-group/flare
+
+extra:
+  recipe-maintainers:
+    - YuuuXie
+    - jan-janssen
